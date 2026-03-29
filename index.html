@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>運用代行×Lark講座｜チーム内共有</title>
+  <style>
+    :root {
+      --bg: #f7f5ff;
+      --surface: #ffffff;
+      --accent: #6c5ce7;
+      --accent2: #fd79a8;
+      --accent3: #00b894;
+      --text: #2d2d2d;
+      --muted: #636e72;
+      --border: #dfe6e9;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+      line-height: 1.7;
+    }
+
+    /* Header */
+    header {
+      background: var(--accent);
+      color: #fff;
+      padding: 40px 24px 32px;
+      text-align: center;
+    }
+    header .tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      border-radius: 20px;
+      padding: 4px 16px;
+      font-size: 0.8em;
+      margin-bottom: 12px;
+      letter-spacing: 0.05em;
+    }
+    header h1 {
+      font-size: 1.8em;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    header p {
+      font-size: 0.95em;
+      opacity: 0.85;
+    }
+
+    /* Nav Tabs */
+    nav {
+      background: #fff;
+      border-bottom: 2px solid var(--border);
+      display: flex;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    nav button {
+      flex-shrink: 0;
+      padding: 14px 20px;
+      border: none;
+      background: none;
+      font-size: 0.9em;
+      color: var(--muted);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+    nav button.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+      font-weight: 700;
+    }
+
+    /* Content */
+    main {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 32px 20px 80px;
+    }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* Section */
+    .section-title {
+      font-size: 1.2em;
+      font-weight: 700;
+      color: var(--accent);
+      border-left: 4px solid var(--accent);
+      padding-left: 12px;
+      margin: 32px 0 16px;
+    }
+    .section-title:first-child { margin-top: 0; }
+
+    /* Card */
+    .card {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 16px;
+      border: 1px solid var(--border);
+    }
+    .card h3 {
+      font-size: 1em;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+    .card p, .card li {
+      font-size: 0.92em;
+      color: var(--muted);
+    }
+    .card ul { padding-left: 1.2em; }
+    .card li { margin-bottom: 4px; }
+
+    /* Highlight Card */
+    .card.highlight {
+      border-left: 4px solid var(--accent);
+      background: #f3f0ff;
+    }
+    .card.pink { border-left-color: var(--accent2); background: #fff0f5; }
+    .card.green { border-left-color: var(--accent3); background: #f0fdf8; }
+
+    /* Badge */
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 0.78em;
+      font-weight: 700;
+      margin-right: 6px;
+      margin-bottom: 4px;
+    }
+    .badge-purple { background: #ede9ff; color: var(--accent); }
+    .badge-pink { background: #ffe6f0; color: var(--accent2); }
+    .badge-green { background: #e6faf5; color: var(--accent3); }
+    .badge-gray { background: #f1f2f6; color: #636e72; }
+
+    /* Table */
+    .table-wrap { overflow-x: auto; margin-bottom: 16px; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9em;
+      background: var(--surface);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    th {
+      background: var(--accent);
+      color: #fff;
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+    }
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:nth-child(even) td { background: #fafafa; }
+
+    /* Timeline */
+    .timeline { position: relative; padding-left: 24px; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 8px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--border);
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 20px;
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -20px;
+      top: 6px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+    .timeline-item.done::before { background: var(--accent3); }
+    .timeline-date {
+      font-size: 0.8em;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+    .timeline-title {
+      font-weight: 700;
+      font-size: 0.95em;
+    }
+    .timeline-body {
+      font-size: 0.88em;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* Price Box */
+    .price-box {
+      background: var(--accent);
+      color: #fff;
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .price-box .label { font-size: 0.85em; opacity: 0.85; margin-bottom: 4px; }
+    .price-box .price { font-size: 2em; font-weight: 700; }
+    .price-box .sub { font-size: 0.85em; opacity: 0.8; margin-top: 6px; }
+
+    /* Notice */
+    .notice {
+      background: #fff8e6;
+      border: 1px solid #ffd86e;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 0.88em;
+      color: #7a5c00;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="tag">チーム内共有資料</div>
+  <h1>運用代行 × Lark講座</h1>
+  <p>選ばれ続ける運用代行者になろう｜0期プロジェクト</p>
+</header>
+
+<nav>
+  <button class="active" onclick="showTab('overview')">概要</button>
+  <button onclick="showTab('curriculum')">カリキュラム</button>
+  <button onclick="showTab('schedule')">スケジュール</button>
+  <button onclick="showTab('roles')">役割分担</button>
+  <button onclick="showTab('sales')">集客設計</button>
+  <button onclick="showTab('links')">リンク集</button>
+</nav>
+
+<main>
+
+  <!-- ===== 概要 ===== -->
+  <div id="tab-overview" class="tab-content active">
+
+    <div class="notice">⚠️ このページはチーム内共有用です。外部への共有はお控えください。</div>
+
+    <p class="section-title">講座コンセプト</p>
+    <div class="card highlight">
+      <h3>キャッチコピー</h3>
+      <p style="font-size:1.1em; font-weight:700; color: var(--accent); margin-bottom:8px;">「選ばれ続ける運用代行者になろう」</p>
+      <p>SNS運用代行として案件は取れているが、リソース頭打ちでチーム化したい人のための3ヶ月伴走型講座。自分のチーム専用Lark管理ベースを構築し、チームへの導入・安定実装まで伴走する。</p>
+    </div>
+
+    <p class="section-title">ターゲット</p>
+    <div class="card">
+      <h3>メインターゲット</h3>
+      <ul>
+        <li>SNS運用代行として案件が取れている（月5万〜）</li>
+        <li>一人では受けきれないリソース頭打ちを感じている</li>
+        <li>チーム化・仕組み化して売上を拡大したい</li>
+        <li>くわちゃん・ちいちゃんポジションの「チーム運営主」が理想形</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>サブターゲット（入るのはOK、積極訴求はしない）</h3>
+      <ul>
+        <li>作業者・メンバー層（チーム主から選ばれ続けたい人）</li>
+        <li>「この講座でゼロイチが叶います」という見せ方はしない</li>
+      </ul>
+    </div>
+
+    <p class="section-title">価格・期間</p>
+    <div class="price-box">
+      <div class="label">0期 特別価格</div>
+      <div class="price">398,000円</div>
+      <div class="sub">AIオプション（Claude Code活用の自分専用AI秘書）：+10万円 ※GW明け判断</div>
+    </div>
+    <div class="card green">
+      <h3>受講でペイできる試算例</h3>
+      <p>1人で月10本3,500円→チーム5人化で月17〜18万円→3ヶ月で45万円創出→398,000円回収可能</p>
+    </div>
+
+    <p class="section-title">ベネフィット</p>
+    <div class="card">
+      <ul>
+        <li>チーム化でリソース上限を突破 → 売上拡大</li>
+        <li>空いたリソースで別案件受注可（企業案件など）</li>
+        <li>Lark構築スキル自体が新しい収入の柱になる</li>
+        <li>卒業後：ネスト（安定運用サポート）へ移行</li>
+      </ul>
+    </div>
+
+    <p class="section-title">集客目標</p>
+    <div class="card">
+      <p><span class="badge badge-purple">最大目標</span>30人</p>
+      <p><span class="badge badge-green">最低ライン</span>15人</p>
+      <p style="margin-top:8px; font-size:0.88em; color:var(--muted);">30人達成には約1,600人のオプチャ登録が必要（試算）</p>
+    </div>
+
+  </div>
+
+  <!-- ===== カリキュラム ===== -->
+  <div id="tab-curriculum" class="tab-content">
+
+    <p class="section-title">講座構成（3ヶ月・全6回）</p>
+    <div class="table-wrap">
+      <table>
+        <tr>
+          <th>回</th>
+          <th>時期</th>
+          <th>内容</th>
+          <th>形式</th>
+        </tr>
+        <tr>
+          <td><span class="badge badge-purple">1回目</span></td>
+          <td>1ヶ月目</td>
+          <td>Lark基本理解①</td>
+          <td>講義</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-purple">2回目</span></td>
+          <td>1ヶ月目</td>
+          <td>Lark基本理解②</td>
+          <td>講義</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-green">3回目</span></td>
+          <td>2ヶ月目</td>
+          <td>要件定義・チームフロー作成</td>
+          <td>講義形式</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-pink">4回目</span></td>
+          <td>3ヶ月目</td>
+          <td>ベース構築・作業会①</td>
+          <td>手を動かす実践</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-pink">5回目</span></td>
+          <td>3ヶ月目</td>
+          <td>ベース構築・作業会②</td>
+          <td>手を動かす実践</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-pink">6回目</span></td>
+          <td>3ヶ月目</td>
+          <td>ベース構築・作業会③</td>
+          <td>手を動かす実践</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>毎日のルーティン</h3>
+      <ul>
+        <li>毎日アウトプット・進捗管理あり</li>
+        <li>学習サポートによる質問対応・アンケート・進捗確認</li>
+        <li>ブレイクアウトルーム形式の少人数作業会（4〜6回目）</li>
+      </ul>
+    </div>
+
+    <p class="section-title">勉強会（集客フェーズ・全4回）</p>
+    <div class="card">
+      <ul>
+        <li><span class="badge badge-purple">1回目</span>ちいちゃんのお悩み相談会（オプチャでフォーム収集→当日回答）</li>
+        <li><span class="badge badge-purple">2回目</span>くわちゃんのお悩み相談会</li>
+        <li><span class="badge badge-purple">3回目</span>ちいちゃん・くわちゃんが「トップ運用代行者がやってること」→Lark活用を見せる</li>
+        <li><span class="badge badge-purple">4回目</span>個別面談誘致</li>
+      </ul>
+    </div>
+
+    <p class="section-title">卒業後（ネスト）</p>
+    <div class="card green">
+      <ul>
+        <li>自分のチームへLarkを導入 → 出張講義（チームへの導入説明）付き</li>
+        <li>ネスト（0期：無料、1期以降：サブスク検討中）</li>
+        <li>0期参加者が作ったベースをコンテンツとして1期以降に提供・販売予定</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- ===== スケジュール ===== -->
+  <div id="tab-schedule" class="tab-content">
+
+    <p class="section-title">ローンチスケジュール</p>
+    <div class="timeline">
+      <div class="timeline-item done">
+        <div class="timeline-date">2026-03-28</div>
+        <div class="timeline-title">オプチャでアンバサダー説明会の告知</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">2026-04-02</div>
+        <div class="timeline-title">アンバサダー説明会（BXP内向け）</div>
+        <div class="timeline-body">講座説明＋アンバサダー募集。Claude で叩き台を即日作成、スライドで説明。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">2026-04-08</div>
+        <div class="timeline-title">ウィンクルーム事前質問会</div>
+        <div class="timeline-body">SHOGO経由。くわちゃん・0期一部・1期一部・知子さん・省吾さん少人数。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">2026-04-09</div>
+        <div class="timeline-title">アンバサダーオリエンテーション</div>
+        <div class="timeline-body">具体的な動き方説明。フォーム入力者への特典（発信訴求パターン）あり。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">2026-04-10〜</div>
+        <div class="timeline-title">一斉集客開始・オプチャ誘導</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">2026-04-18〜</div>
+        <div class="timeline-title">勉強会開始（全4回）</div>
+        <div class="timeline-body">ちいちゃん・くわちゃん登壇のお悩み相談会形式。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">3回目勉強会後〜</div>
+        <div class="timeline-title">個別面談開始</div>
+        <div class="timeline-body">ちいちゃん・くわちゃん主導。料金を含めた詳細資料を提示。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">2026-05月中旬〜06月</div>
+        <div class="timeline-title">講座スタート</div>
+        <div class="timeline-body">人数・繁忙によって調整。</div>
+      </div>
+    </div>
+
+    <p class="section-title">確認済みの直近アクション</p>
+    <div class="card">
+      <ul>
+        <li>2026-03-31：いよ・くわちゃん・ちいちゃんリアル会合（ターゲット・ロードマップ・ベネフィット確認）</li>
+        <li>ちいちゃん・くわちゃんをチャットに追加</li>
+        <li>4月2日用スライドをClaudeで作成</li>
+        <li>最終クロージング資料：あっこさん経由でデザイナーに依頼</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- ===== 役割分担 ===== -->
+  <div id="tab-roles" class="tab-content">
+
+    <p class="section-title">役割分担一覧</p>
+    <div class="table-wrap">
+      <table>
+        <tr>
+          <th>役割</th>
+          <th>担当者</th>
+          <th>詳細</th>
+        </tr>
+        <tr>
+          <td>集客リーダー・運営全般</td>
+          <td>いよ・SHIHO</td>
+          <td>オプチャ・勉強会・個別面談管理・書類・スケジュール</td>
+        </tr>
+        <tr>
+          <td>ローンチディレクター</td>
+          <td>そのママ（園山さん）</td>
+          <td>数値分析・全体戦略の頭出し。SHIHOとの分配：4:6〜5:5</td>
+        </tr>
+        <tr>
+          <td>メイン講師（運用代行リアル）</td>
+          <td>ちーちゃん・くわちゃん</td>
+          <td>勉強会登壇・個別面談・ゲリラ担当</td>
+        </tr>
+        <tr>
+          <td>ベース構築サポート</td>
+          <td>マサ（窪内）・トシ（KOIKE）</td>
+          <td>4〜6回目のサポートメイン。Lark Baseの技術サポート・仕組み設計アドバイス</td>
+        </tr>
+        <tr>
+          <td>学習サポート・進捗管理</td>
+          <td>ゆうりさん・ちびのん</td>
+          <td>質問対応・アンケート・進捗確認</td>
+        </tr>
+        <tr>
+          <td>個別紹介アンバサダー</td>
+          <td>BXPメンバー全員</td>
+          <td>紹介料10%（約4万円）</td>
+        </tr>
+        <tr>
+          <td>相談役（ベース補佐）</td>
+          <td>たのパパ・シュン</td>
+          <td>必要に応じて、強制ではない</td>
+        </tr>
+        <tr>
+          <td>AI秘書オプション担当</td>
+          <td>未定（マサ・たのパパ・シュン有力）</td>
+          <td>GW明けに判断</td>
+        </tr>
+      </table>
+    </div>
+
+    <p class="section-title">報酬分配</p>
+    <div class="card highlight">
+      <ul>
+        <li>ベース構築サポート枠の12%をマサ・トシ・相談役で分配（相談度合いによりメンバー間で決定）</li>
+        <li>アンバサダー：制約成立で10%（決済方法により変動あり）</li>
+        <li>ローンチディレクター（そのママ）：SHIHOとの分配 4:6〜5:5</li>
+      </ul>
+    </div>
+
+    <p class="section-title">決済方法（検討中）</p>
+    <div class="notice">前回（1期）は決済手数料で100万円近く取られた。今回は要改善。</div>
+    <div class="card">
+      <ul>
+        <li>SHIHOのユニバペイ（安いが未使用）</li>
+        <li>モッシュ（6.5%〜）</li>
+        <li>銀行振り込み一括なら割引（他講座の慣例）→今回から導入検討</li>
+        <li>朋子さんと要確認</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- ===== 集客設計 ===== -->
+  <div id="tab-sales" class="tab-content">
+
+    <p class="section-title">前回（1期）の実績</p>
+    <div class="table-wrap">
+      <table>
+        <tr><th>指標</th><th>数値</th></tr>
+        <tr><td>オプチャ登録</td><td>358人</td></tr>
+        <tr><td>Lark登録</td><td>183人</td></tr>
+        <tr><td>成約率（全体）</td><td>21%</td></tr>
+        <tr><td>面談→成約率</td><td>55.26%</td></tr>
+        <tr><td>勉強会→成約率</td><td>17.21%</td></tr>
+      </table>
+    </div>
+
+    <p class="section-title">オプチャ戦略</p>
+    <div class="card">
+      <h3>「選ばれ続ける運用代行者になろう」オプチャ</h3>
+      <ul>
+        <li>既存「スキルで稼ぐ秘密の会」（360人）は残す（DXキャンプ2期等に活用）</li>
+        <li>興味ある人を新オプチャに誘導</li>
+        <li>濃い接点（個別に声をかけられる人経由）が重要</li>
+        <li>30人達成には約1,600人のオプチャ登録が必要（試算）</li>
+      </ul>
+    </div>
+
+    <p class="section-title">アンバサダー戦略</p>
+    <div class="card pink">
+      <h3>アンバサダーの定義</h3>
+      <ul>
+        <li>自分のフロントチャンネル（インスタ等）でオプチャに人を流してくれる人</li>
+        <li>個別に声かけしてオプチャに誘導してくれる人</li>
+        <li>制約成立で10%支払い</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>4/2説明会のゴール（そのママ提案）</h3>
+      <ul>
+        <li>アンバサダーを集めるだけでなく、各アクションに数値目標を立てる</li>
+        <li>固有接点（声かけできる人数）をフォームで把握</li>
+        <li>自分のアカウントで発信する人の人数も把握</li>
+        <li>4/9オリエンテーションまでにフォーム入力した人には「成約につながるストーリーズ訴求を教える」特典</li>
+      </ul>
+    </div>
+
+    <p class="section-title">集客チャネル</p>
+    <div class="card">
+      <ul>
+        <li>既存オープチャ（約360人）→ 運用代行専用オープチャに誘導</li>
+        <li>Larkグループチャット（約180人）</li>
+        <li>BXPメンバー（約40人）からの個別紹介</li>
+        <li>SNS発信（ストーリー等）</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- ===== リンク集 ===== -->
+  <div id="tab-links" class="tab-content">
+
+    <p class="section-title">重要リンク</p>
+    <div class="notice">URLは随時更新してください。</div>
+
+    <div class="card">
+      <h3>Lark</h3>
+      <ul>
+        <li>運用代行×Lark講座 Lark Base：<span style="color:var(--muted);">（URLをここに追加）</span></li>
+        <li>チームグループチャット：<span style="color:var(--muted);">（URLをここに追加）</span></li>
+        <li>「選ばれ続ける運用代行者になろう」オプチャ：<span style="color:var(--muted);">（URLをここに追加）</span></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>資料</h3>
+      <ul>
+        <li>4/2アンバサダー説明会スライド：<span style="color:var(--muted);">（URLをここに追加）</span></li>
+        <li>クロージング資料（デザイン依頼中）：<span style="color:var(--muted);">（URLをここに追加）</span></li>
+        <li>アンバサダー向けフォーム：<span style="color:var(--muted);">（URLをここに追加）</span></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>決済</h3>
+      <ul>
+        <li>ユニバペイ or モッシュ：<span style="color:var(--muted);">（決定後に追加）</span></li>
+      </ul>
+    </div>
+
+  </div>
+
+</main>
+
+<script>
+  function showTab(name) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('nav button').forEach(el => el.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    event.target.classList.add('active');
+  }
+</script>
+
+</body>
+</html>
