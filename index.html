@@ -6,14 +6,16 @@
   <title>運用代行×Lark講座｜チーム内共有</title>
   <style>
     :root {
-      --bg: #f7f5ff;
+      --bg: #f5f3ff;
       --surface: #ffffff;
+      --surface2: #ede9ff;
       --accent: #6c5ce7;
       --accent2: #fd79a8;
       --accent3: #00b894;
+      --accent4: #fdcb6e;
       --text: #2d2d2d;
       --muted: #636e72;
-      --border: #dfe6e9;
+      --border: #dfe0f5;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -21,234 +23,340 @@
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+      font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', 'Yu Gothic', sans-serif;
       line-height: 1.7;
     }
 
-    /* Header */
+    /* ===== HEADER ===== */
     header {
-      background: var(--accent);
+      background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
       color: #fff;
-      padding: 40px 24px 32px;
+      padding: 44px 24px 36px;
       text-align: center;
+      position: relative;
+      overflow: hidden;
     }
-    header .tag {
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: -30px; left: 50%; transform: translateX(-50%);
+      width: 200%;
+      height: 60px;
+      background: var(--bg);
+      border-radius: 50%;
+    }
+    .header-inner { position: relative; z-index: 1; }
+    .tag {
       display: inline-block;
       background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.4);
       border-radius: 20px;
       padding: 4px 16px;
-      font-size: 0.8em;
-      margin-bottom: 12px;
-      letter-spacing: 0.05em;
+      font-size: 0.78em;
+      margin-bottom: 14px;
+      letter-spacing: 0.08em;
     }
     header h1 {
-      font-size: 1.8em;
-      font-weight: 700;
+      font-size: clamp(1.5em, 5vw, 2.2em);
+      font-weight: 800;
       margin-bottom: 8px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.15);
     }
-    header p {
-      font-size: 0.95em;
-      opacity: 0.85;
+    header .catch {
+      font-size: clamp(0.95em, 2.5vw, 1.15em);
+      opacity: 0.9;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .header-badges { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 10px; }
+    .header-badge {
+      background: rgba(255,255,255,0.2);
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: 0.82em;
+      font-weight: 600;
     }
 
-    /* Nav Tabs */
+    /* ===== NAV ===== */
     nav {
       background: #fff;
       border-bottom: 2px solid var(--border);
       display: flex;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(108,92,231,0.08);
     }
+    nav::-webkit-scrollbar { height: 3px; }
+    nav::-webkit-scrollbar-thumb { background: var(--border); }
     nav button {
       flex-shrink: 0;
-      padding: 14px 20px;
+      padding: 14px 18px;
       border: none;
       background: none;
-      font-size: 0.9em;
+      font-size: 0.88em;
       color: var(--muted);
       cursor: pointer;
       border-bottom: 3px solid transparent;
       margin-bottom: -2px;
       font-family: inherit;
       white-space: nowrap;
+      transition: all 0.2s;
     }
+    nav button:hover { color: var(--accent); }
     nav button.active {
       color: var(--accent);
       border-bottom-color: var(--accent);
       font-weight: 700;
     }
 
-    /* Content */
+    /* ===== MAIN ===== */
     main {
-      max-width: 860px;
+      max-width: 900px;
       margin: 0 auto;
-      padding: 32px 20px 80px;
+      padding: 40px 20px 100px;
     }
 
     .tab-content { display: none; }
-    .tab-content.active { display: block; }
+    .tab-content.active { display: block; animation: fadeIn 0.2s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* Section */
+    /* ===== SECTION TITLE ===== */
     .section-title {
-      font-size: 1.2em;
-      font-weight: 700;
+      font-size: 1.1em;
+      font-weight: 800;
       color: var(--accent);
       border-left: 4px solid var(--accent);
       padding-left: 12px;
-      margin: 32px 0 16px;
+      margin: 36px 0 16px;
     }
     .section-title:first-child { margin-top: 0; }
 
-    /* Card */
+    /* ===== CARD ===== */
     .card {
       background: var(--surface);
-      border-radius: 12px;
+      border-radius: 14px;
       padding: 20px 24px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       border: 1px solid var(--border);
+      box-shadow: 0 2px 8px rgba(108,92,231,0.05);
     }
     .card h3 {
-      font-size: 1em;
+      font-size: 0.98em;
       font-weight: 700;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       color: var(--text);
     }
     .card p, .card li {
-      font-size: 0.92em;
+      font-size: 0.9em;
       color: var(--muted);
     }
     .card ul { padding-left: 1.2em; }
-    .card li { margin-bottom: 4px; }
+    .card li { margin-bottom: 5px; }
+    .card.highlight { border-left: 4px solid var(--accent); background: #f3f0ff; }
+    .card.pink { border-left: 4px solid var(--accent2); background: #fff0f5; }
+    .card.green { border-left: 4px solid var(--accent3); background: #f0fdf8; }
+    .card.yellow { border-left: 4px solid var(--accent4); background: #fffbf0; }
 
-    /* Highlight Card */
-    .card.highlight {
-      border-left: 4px solid var(--accent);
-      background: #f3f0ff;
-    }
-    .card.pink { border-left-color: var(--accent2); background: #fff0f5; }
-    .card.green { border-left-color: var(--accent3); background: #f0fdf8; }
-
-    /* Badge */
+    /* ===== BADGE ===== */
     .badge {
       display: inline-block;
-      padding: 3px 10px;
+      padding: 2px 10px;
       border-radius: 12px;
-      font-size: 0.78em;
+      font-size: 0.76em;
       font-weight: 700;
       margin-right: 6px;
-      margin-bottom: 4px;
     }
     .badge-purple { background: #ede9ff; color: var(--accent); }
-    .badge-pink { background: #ffe6f0; color: var(--accent2); }
-    .badge-green { background: #e6faf5; color: var(--accent3); }
-    .badge-gray { background: #f1f2f6; color: #636e72; }
+    .badge-pink   { background: #ffe6f0; color: var(--accent2); }
+    .badge-green  { background: #e6faf5; color: var(--accent3); }
+    .badge-gray   { background: #f1f2f6; color: #636e72; }
+    .badge-yellow { background: #fff8e1; color: #b7860a; }
 
-    /* Table */
-    .table-wrap { overflow-x: auto; margin-bottom: 16px; }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.9em;
-      background: var(--surface);
-      border-radius: 12px;
-      overflow: hidden;
-    }
-    th {
-      background: var(--accent);
-      color: #fff;
-      padding: 12px 16px;
-      text-align: left;
-      font-weight: 600;
-    }
-    td {
-      padding: 12px 16px;
-      border-bottom: 1px solid var(--border);
-      vertical-align: top;
-    }
+    /* ===== TABLE ===== */
+    .table-wrap { overflow-x: auto; margin-bottom: 14px; border-radius: 12px; box-shadow: 0 2px 8px rgba(108,92,231,0.06); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88em; background: var(--surface); }
+    th { background: var(--accent); color: #fff; padding: 12px 14px; text-align: left; font-weight: 600; }
+    th:first-child { border-radius: 12px 0 0 0; }
+    th:last-child  { border-radius: 0 12px 0 0; }
+    td { padding: 11px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
     tr:last-child td { border-bottom: none; }
-    tr:nth-child(even) td { background: #fafafa; }
+    tr:nth-child(even) td { background: #fbfaff; }
 
-    /* Timeline */
-    .timeline { position: relative; padding-left: 24px; }
-    .timeline::before {
-      content: '';
-      position: absolute;
-      left: 8px;
-      top: 0;
-      bottom: 0;
-      width: 2px;
-      background: var(--border);
-    }
-    .timeline-item {
-      position: relative;
-      margin-bottom: 20px;
-    }
-    .timeline-item::before {
-      content: '';
-      position: absolute;
-      left: -20px;
-      top: 6px;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--accent);
-    }
-    .timeline-item.done::before { background: var(--accent3); }
-    .timeline-date {
-      font-size: 0.8em;
-      color: var(--muted);
-      margin-bottom: 2px;
-    }
-    .timeline-title {
-      font-weight: 700;
-      font-size: 0.95em;
-    }
-    .timeline-body {
-      font-size: 0.88em;
-      color: var(--muted);
-      margin-top: 4px;
-    }
-
-    /* Price Box */
+    /* ===== PRICE BOX ===== */
     .price-box {
-      background: var(--accent);
+      background: linear-gradient(135deg, var(--accent) 0%, #a29bfe 100%);
       color: #fff;
-      border-radius: 12px;
-      padding: 24px;
+      border-radius: 16px;
+      padding: 28px 24px;
       text-align: center;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 20px rgba(108,92,231,0.25);
     }
-    .price-box .label { font-size: 0.85em; opacity: 0.85; margin-bottom: 4px; }
-    .price-box .price { font-size: 2em; font-weight: 700; }
-    .price-box .sub { font-size: 0.85em; opacity: 0.8; margin-top: 6px; }
+    .price-box .label { font-size: 0.82em; opacity: 0.85; margin-bottom: 4px; }
+    .price-box .price { font-size: 2.4em; font-weight: 800; letter-spacing: -0.02em; }
+    .price-box .sub { font-size: 0.82em; opacity: 0.85; margin-top: 8px; }
 
-    /* Notice */
+    /* ===== NOTICE ===== */
     .notice {
       background: #fff8e6;
       border: 1px solid #ffd86e;
-      border-radius: 8px;
+      border-radius: 10px;
       padding: 12px 16px;
-      font-size: 0.88em;
+      font-size: 0.86em;
       color: #7a5c00;
       margin-bottom: 16px;
     }
+
+    /* ===== FLOW (Step-by-Step) ===== */
+    .flow-steps { display: flex; flex-direction: column; gap: 0; }
+    .flow-step {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      position: relative;
+    }
+    .flow-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 19px;
+      top: 44px;
+      bottom: -4px;
+      width: 2px;
+      background: var(--border);
+    }
+    .flow-num {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.9em;
+      position: relative;
+      z-index: 1;
+    }
+    .flow-num.green  { background: var(--accent3); }
+    .flow-num.pink   { background: var(--accent2); }
+    .flow-num.yellow { background: var(--accent4); color: #5a3e00; }
+    .flow-body { flex: 1; background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 14px 18px; margin-bottom: 16px; }
+    .flow-body h4 { font-size: 0.95em; font-weight: 700; margin-bottom: 4px; }
+    .flow-body p  { font-size: 0.87em; color: var(--muted); }
+
+    /* ===== TIMELINE ===== */
+    .timeline { position: relative; padding-left: 28px; }
+    .timeline::before {
+      content: ''; position: absolute;
+      left: 10px; top: 0; bottom: 0; width: 2px;
+      background: linear-gradient(to bottom, var(--accent), var(--accent3));
+    }
+    .timeline-item { position: relative; margin-bottom: 22px; }
+    .timeline-item::before {
+      content: ''; position: absolute;
+      left: -22px; top: 6px;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid #fff;
+      box-shadow: 0 0 0 2px var(--accent);
+    }
+    .timeline-item.done::before { background: var(--accent3); box-shadow: 0 0 0 2px var(--accent3); }
+    .timeline-item.current::before { background: var(--accent4); box-shadow: 0 0 0 2px var(--accent4); }
+    .timeline-date  { font-size: 0.78em; color: var(--muted); margin-bottom: 2px; font-weight: 600; }
+    .timeline-title { font-weight: 700; font-size: 0.93em; }
+    .timeline-body  { font-size: 0.85em; color: var(--muted); margin-top: 4px; }
+
+    /* ===== GRID ===== */
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 600px) { .grid2 { grid-template-columns: 1fr; } }
+
+    /* ===== STAT ===== */
+    .stat-row { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
+    .stat-box {
+      flex: 1; min-width: 120px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      text-align: center;
+    }
+    .stat-box .stat-val { font-size: 1.5em; font-weight: 800; color: var(--accent); }
+    .stat-box .stat-label { font-size: 0.78em; color: var(--muted); margin-top: 2px; }
+
+    /* ===== CURRICULUM PHASE ===== */
+    .phase-block {
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 14px;
+      border: 1px solid var(--border);
+    }
+    .phase-header {
+      padding: 12px 18px;
+      font-weight: 700;
+      font-size: 0.92em;
+      color: #fff;
+    }
+    .phase-header.p1 { background: var(--accent); }
+    .phase-header.p2 { background: var(--accent3); }
+    .phase-header.p3 { background: var(--accent2); }
+    .phase-rows { background: #fff; }
+    .phase-row {
+      display: flex;
+      align-items: flex-start;
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--border);
+      gap: 14px;
+      font-size: 0.88em;
+    }
+    .phase-row:last-child { border-bottom: none; }
+    .phase-row-num {
+      flex-shrink: 0;
+      background: var(--surface2);
+      color: var(--accent);
+      font-weight: 800;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.88em;
+    }
+    .phase-row-body { flex: 1; }
+    .phase-row-body strong { display: block; font-weight: 700; margin-bottom: 2px; }
+    .phase-row-body span { color: var(--muted); font-size: 0.93em; }
   </style>
 </head>
 <body>
 
 <header>
-  <div class="tag">チーム内共有資料</div>
-  <h1>運用代行 × Lark講座</h1>
-  <p>選ばれ続ける運用代行者になろう｜0期プロジェクト</p>
+  <div class="header-inner">
+    <div class="tag">チーム内共有資料 ｜ 2026年0期</div>
+    <h1>運用代行 × Lark 講座</h1>
+    <p class="catch">「選ばれ続ける運用代行者になろう」</p>
+    <div class="header-badges">
+      <div class="header-badge">3ヶ月伴走型</div>
+      <div class="header-badge">0期 398,000円</div>
+      <div class="header-badge">目標 15〜30人</div>
+      <div class="header-badge">5月中旬〜6月スタート</div>
+    </div>
+  </div>
 </header>
 
 <nav>
-  <button class="active" onclick="showTab('overview')">概要</button>
-  <button onclick="showTab('curriculum')">カリキュラム</button>
-  <button onclick="showTab('schedule')">スケジュール</button>
-  <button onclick="showTab('roles')">役割分担</button>
-  <button onclick="showTab('sales')">集客設計</button>
-  <button onclick="showTab('links')">リンク集</button>
+  <button class="active" onclick="showTab('overview', this)">概要</button>
+  <button onclick="showTab('flow', this)">全体フロー</button>
+  <button onclick="showTab('curriculum', this)">カリキュラム</button>
+  <button onclick="showTab('schedule', this)">スケジュール</button>
+  <button onclick="showTab('roles', this)">役割分担</button>
+  <button onclick="showTab('sales', this)">集客設計</button>
+  <button onclick="showTab('links', this)">リンク集</button>
 </nav>
 
 <main>
@@ -258,57 +366,162 @@
 
     <div class="notice">⚠️ このページはチーム内共有用です。外部への共有はお控えください。</div>
 
-    <p class="section-title">講座コンセプト</p>
+    <p class="section-title">この講座とは</p>
     <div class="card highlight">
-      <h3>キャッチコピー</h3>
-      <p style="font-size:1.1em; font-weight:700; color: var(--accent); margin-bottom:8px;">「選ばれ続ける運用代行者になろう」</p>
-      <p>SNS運用代行として案件は取れているが、リソース頭打ちでチーム化したい人のための3ヶ月伴走型講座。自分のチーム専用Lark管理ベースを構築し、チームへの導入・安定実装まで伴走する。</p>
+      <h3>コンセプト</h3>
+      <p style="font-size:1.05em; font-weight:700; color:var(--accent); margin-bottom:10px;">「選ばれ続ける運用代行者になろう」</p>
+      <p>SNS運用代行として案件は取れているが、<strong>一人では受けきれないリソース頭打ち</strong>を感じている人のための3ヶ月伴走型講座。自分のチーム専用Lark管理ベースを一緒に構築し、チームへの導入・安定実装まで徹底サポートする。</p>
     </div>
 
-    <p class="section-title">ターゲット</p>
-    <div class="card">
-      <h3>メインターゲット</h3>
-      <ul>
-        <li>SNS運用代行として案件が取れている（月5万〜）</li>
-        <li>一人では受けきれないリソース頭打ちを感じている</li>
-        <li>チーム化・仕組み化して売上を拡大したい</li>
-        <li>くわちゃん・ちいちゃんポジションの「チーム運営主」が理想形</li>
-      </ul>
-    </div>
-    <div class="card">
-      <h3>サブターゲット（入るのはOK、積極訴求はしない）</h3>
-      <ul>
-        <li>作業者・メンバー層（チーム主から選ばれ続けたい人）</li>
-        <li>「この講座でゼロイチが叶います」という見せ方はしない</li>
-      </ul>
+    <div class="grid2">
+      <div class="card">
+        <h3>メインターゲット</h3>
+        <ul>
+          <li>月5万〜稼いでいて一人では受けきれない</li>
+          <li>チーム化・仕組み化して売上を拡大したい</li>
+          <li>くわちゃん・ちいちゃんポジションを目指している</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>サブターゲット（入るのはOK）</h3>
+        <ul>
+          <li>作業者・メンバー層</li>
+          <li>チーム主から選ばれ続けたい人</li>
+          <li>※「ゼロイチが叶います」訴求はしない</li>
+        </ul>
+      </div>
     </div>
 
     <p class="section-title">価格・期間</p>
     <div class="price-box">
       <div class="label">0期 特別価格</div>
       <div class="price">398,000円</div>
-      <div class="sub">AIオプション（Claude Code活用の自分専用AI秘書）：+10万円 ※GW明け判断</div>
+      <div class="sub">AIオプション（Claude Code活用の専用AI秘書）：+10万円 ※GW明けに判断</div>
     </div>
     <div class="card green">
-      <h3>受講でペイできる試算例</h3>
-      <p>1人で月10本3,500円→チーム5人化で月17〜18万円→3ヶ月で45万円創出→398,000円回収可能</p>
+      <h3>3ヶ月でペイできる試算</h3>
+      <p>1人で月10本3,500円<br>→ チーム5人化で月17〜18万円<br>→ 3ヶ月で45万円創出 → <strong>398,000円回収可能</strong></p>
+      <p style="margin-top:8px; font-size:0.84em;">※くわちゃん・ちいちゃんに実際の数値を確認して提示予定</p>
     </div>
 
-    <p class="section-title">ベネフィット</p>
+    <p class="section-title">受講でどう変わるか（ベネフィット）</p>
     <div class="card">
       <ul>
-        <li>チーム化でリソース上限を突破 → 売上拡大</li>
-        <li>空いたリソースで別案件受注可（企業案件など）</li>
-        <li>Lark構築スキル自体が新しい収入の柱になる</li>
-        <li>卒業後：ネスト（安定運用サポート）へ移行</li>
+        <li><span class="badge badge-purple">拡張</span>チーム化でリソース上限を突破 → 売上拡大</li>
+        <li><span class="badge badge-green">新収入</span>空いたリソースで別案件受注・企業案件が来る状態へ</li>
+        <li><span class="badge badge-purple">スキル</span>Lark構築スキル自体が新しい収入の柱になる</li>
+        <li><span class="badge badge-green">継続</span>卒業後もネスト（安定運用コミュニティ）でサポート継続</li>
       </ul>
     </div>
 
-    <p class="section-title">集客目標</p>
-    <div class="card">
-      <p><span class="badge badge-purple">最大目標</span>30人</p>
-      <p><span class="badge badge-green">最低ライン</span>15人</p>
-      <p style="margin-top:8px; font-size:0.88em; color:var(--muted);">30人達成には約1,600人のオプチャ登録が必要（試算）</p>
+    <p class="section-title">数値目標</p>
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="stat-val">30人</div>
+        <div class="stat-label">最大目標</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val">15人</div>
+        <div class="stat-label">最低ライン</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val">1,600人</div>
+        <div class="stat-label">必要オプチャ登録数（試算）</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val">55%</div>
+        <div class="stat-label">前回 面談→成約率</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== 全体フロー ===== -->
+  <div id="tab-flow" class="tab-content">
+
+    <p class="section-title">顧客獲得フロー（全体像）</p>
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="flow-num">1</div>
+        <div class="flow-body">
+          <h4>認知・誘導</h4>
+          <p>アンバサダーのSNS発信 / 個別声かけ / 既存オプチャ（360人）→「選ばれ続ける運用代行者になろう」オプチャへ誘導</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">2</div>
+        <div class="flow-body">
+          <h4>勉強会（全4回）で温める</h4>
+          <p>①②ちいちゃん・くわちゃんのお悩み相談会 → ③トップ運用代行者のリアル＋Lark活用を見せる → ④個別面談へ誘致</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num yellow">3</div>
+        <div class="flow-body">
+          <h4>個別面談</h4>
+          <p>ちいちゃん・くわちゃん主導。料金含む詳細資料を提示。面談→成約率：前回55%</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num pink">4</div>
+        <div class="flow-body">
+          <h4>購入・決済</h4>
+          <p>398,000円（AIオプション+10万円）。決済方法は検討中（モッシュ6.5%〜 / 銀行振込割引）</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num green">5</div>
+        <div class="flow-body">
+          <h4>3ヶ月伴走型講座（全6回）</h4>
+          <p>Lark理解（2回）→ 要件定義・フロー設計（1回）→ ベース構築作業会（3回）。毎日アウトプット・進捗管理あり</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num green">6</div>
+        <div class="flow-body">
+          <h4>卒業・チーム導入</h4>
+          <p>自分のチームへLark導入。出張講義（チームへの導入説明）付き</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num green">7</div>
+        <div class="flow-body">
+          <h4>ネスト（安定運用コミュニティ）</h4>
+          <p>0期：無料。1期以降：サブスク（月980〜1,980円）。情報交換・実装相談・PM相談が継続可能</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="section-title">講座内フロー（受講生の3ヶ月）</p>
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="flow-num">1</div>
+        <div class="flow-body">
+          <h4>1ヶ月目：Lark全体理解（2回）</h4>
+          <p>馬場・修さん制作のコンテンツを予習用に配布。講義では「違う視点・体験型」を重視。ゴールは「慣れてもらう」</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">2</div>
+        <div class="flow-body">
+          <h4>2ヶ月目：要件定義・チームフロー設計（1回）</h4>
+          <p>自分のチームの形を知る。要件定義の方法・フロー作成（運用代行特化テンプレート使用）</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num green">3</div>
+        <div class="flow-body">
+          <h4>3ヶ月目：ベース構築作業会（3回）</h4>
+          <p>マサ・トシによるLark Baseサポート付き。ブレイクアウトルーム形式で少人数対応。手を動かして完成させる</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num green">4</div>
+        <div class="flow-body">
+          <h4>卒業→チーム導入→ネスト移行</h4>
+          <p>出張講義でチームに導入説明。その後ネストで安定運用サポートへ</p>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -317,78 +530,92 @@
   <div id="tab-curriculum" class="tab-content">
 
     <p class="section-title">講座構成（3ヶ月・全6回）</p>
-    <div class="table-wrap">
-      <table>
-        <tr>
-          <th>回</th>
-          <th>時期</th>
-          <th>内容</th>
-          <th>形式</th>
-        </tr>
-        <tr>
-          <td><span class="badge badge-purple">1回目</span></td>
-          <td>1ヶ月目</td>
-          <td>Lark基本理解①</td>
-          <td>講義</td>
-        </tr>
-        <tr>
-          <td><span class="badge badge-purple">2回目</span></td>
-          <td>1ヶ月目</td>
-          <td>Lark基本理解②</td>
-          <td>講義</td>
-        </tr>
-        <tr>
-          <td><span class="badge badge-green">3回目</span></td>
-          <td>2ヶ月目</td>
-          <td>要件定義・チームフロー作成</td>
-          <td>講義形式</td>
-        </tr>
-        <tr>
-          <td><span class="badge badge-pink">4回目</span></td>
-          <td>3ヶ月目</td>
-          <td>ベース構築・作業会①</td>
-          <td>手を動かす実践</td>
-        </tr>
-        <tr>
-          <td><span class="badge badge-pink">5回目</span></td>
-          <td>3ヶ月目</td>
-          <td>ベース構築・作業会②</td>
-          <td>手を動かす実践</td>
-        </tr>
-        <tr>
-          <td><span class="badge badge-pink">6回目</span></td>
-          <td>3ヶ月目</td>
-          <td>ベース構築・作業会③</td>
-          <td>手を動かす実践</td>
-        </tr>
-      </table>
+
+    <div class="phase-block">
+      <div class="phase-header p1">Phase 1：Lark全体理解（1ヶ月目）</div>
+      <div class="phase-rows">
+        <div class="phase-row">
+          <div class="phase-row-num">1</div>
+          <div class="phase-row-body">
+            <strong>Lark基本理解①</strong>
+            <span>チャット・カレンダー・ドキュメント・グループ機能の全体把握。予習動画（馬場・修さん素材）配布済み</span>
+          </div>
+        </div>
+        <div class="phase-row">
+          <div class="phase-row-num">2</div>
+          <div class="phase-row-body">
+            <strong>Lark基本理解②</strong>
+            <span>Base・自動化・連携機能。「慣れる」がゴール。参加型・体験型で進める</span>
+          </div>
+        </div>
+      </div>
     </div>
 
+    <div class="phase-block">
+      <div class="phase-header p2">Phase 2：設計（2ヶ月目）</div>
+      <div class="phase-rows">
+        <div class="phase-row">
+          <div class="phase-row-num">3</div>
+          <div class="phase-row-body">
+            <strong>要件定義・チームフロー設計</strong>
+            <span>「自分のチームの形を知る」。運用代行特化テンプレートを使って要件定義とフロー作成を実施（講義形式）</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-block">
+      <div class="phase-header p3">Phase 3：ベース構築・実装（3ヶ月目）</div>
+      <div class="phase-rows">
+        <div class="phase-row">
+          <div class="phase-row-num">4</div>
+          <div class="phase-row-body">
+            <strong>ベース構築 作業会①</strong>
+            <span>マサ・トシによるLark Baseサポート。少人数ブレイクアウトルームで手を動かす</span>
+          </div>
+        </div>
+        <div class="phase-row">
+          <div class="phase-row-num">5</div>
+          <div class="phase-row-body">
+            <strong>ベース構築 作業会②</strong>
+            <span>前回の続き・自動化・連携設定。学習サポート（ゆうり・ちびのん）が進捗確認</span>
+          </div>
+        </div>
+        <div class="phase-row">
+          <div class="phase-row-num">6</div>
+          <div class="phase-row-body">
+            <strong>ベース構築 作業会③ → 完成</strong>
+            <span>仕上げ・QA。チームへの導入準備。卒業→ネスト移行</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="section-title">日常サポート体制</p>
     <div class="card">
-      <h3>毎日のルーティン</h3>
       <ul>
-        <li>毎日アウトプット・進捗管理あり</li>
-        <li>学習サポートによる質問対応・アンケート・進捗確認</li>
-        <li>ブレイクアウトルーム形式の少人数作業会（4〜6回目）</li>
+        <li>毎日アウトプット・進捗管理あり（Lark上で共有）</li>
+        <li>学習サポート（ゆうり・ちびのん）による質問対応・アンケート確認</li>
+        <li>ゲリラセッション：ビジネスマインド・AI活用・目標設定（SHOGO・けいすけ・くわちゃん・ちいちゃん）</li>
       </ul>
     </div>
 
-    <p class="section-title">勉強会（集客フェーズ・全4回）</p>
-    <div class="card">
+    <p class="section-title">集客フェーズ 勉強会（全4回）</p>
+    <div class="card pink">
       <ul>
-        <li><span class="badge badge-purple">1回目</span>ちいちゃんのお悩み相談会（オプチャでフォーム収集→当日回答）</li>
-        <li><span class="badge badge-purple">2回目</span>くわちゃんのお悩み相談会</li>
-        <li><span class="badge badge-purple">3回目</span>ちいちゃん・くわちゃんが「トップ運用代行者がやってること」→Lark活用を見せる</li>
-        <li><span class="badge badge-purple">4回目</span>個別面談誘致</li>
+        <li><span class="badge badge-pink">1回目</span>ちいちゃんのお悩み相談会（オプチャでフォーム収集→当日回答）</li>
+        <li><span class="badge badge-pink">2回目</span>くわちゃんのお悩み相談会</li>
+        <li><span class="badge badge-pink">3回目</span>「トップ運用代行者がやってること」→Lark活用をリアルに見せる</li>
+        <li><span class="badge badge-pink">4回目</span>個別面談誘致</li>
       </ul>
     </div>
 
     <p class="section-title">卒業後（ネスト）</p>
     <div class="card green">
       <ul>
-        <li>自分のチームへLarkを導入 → 出張講義（チームへの導入説明）付き</li>
-        <li>ネスト（0期：無料、1期以降：サブスク検討中）</li>
-        <li>0期参加者が作ったベースをコンテンツとして1期以降に提供・販売予定</li>
+        <li>出張講義：チームへの導入説明1回（ネスト特典）</li>
+        <li>ネスト参加（0期：無料、1期以降：サブスク月980〜1,980円）</li>
+        <li>0期参加者が作ったベースを1期以降にコンテンツとして提供・販売予定</li>
       </ul>
     </div>
 
@@ -397,40 +624,46 @@
   <!-- ===== スケジュール ===== -->
   <div id="tab-schedule" class="tab-content">
 
-    <p class="section-title">ローンチスケジュール</p>
+    <p class="section-title">ローンチスケジュール（確定）</p>
     <div class="timeline">
       <div class="timeline-item done">
-        <div class="timeline-date">2026-03-28</div>
-        <div class="timeline-title">オプチャでアンバサダー説明会の告知</div>
+        <div class="timeline-date">2026-03-28 ✓完了</div>
+        <div class="timeline-title">オプチャでアンバサダー説明会の告知を流す</div>
+      </div>
+      <div class="timeline-item current">
+        <div class="timeline-date">2026-03-31</div>
+        <div class="timeline-title">いよ・くわちゃん・ちいちゃん リアル会合</div>
+        <div class="timeline-body">ターゲット・ロードマップ・ベネフィットの確認。ちいちゃん・くわちゃんをチャットに追加。</div>
       </div>
       <div class="timeline-item">
         <div class="timeline-date">2026-04-02</div>
         <div class="timeline-title">アンバサダー説明会（BXP内向け）</div>
-        <div class="timeline-body">講座説明＋アンバサダー募集。Claude で叩き台を即日作成、スライドで説明。</div>
+        <div class="timeline-body">講座説明＋アンバサダー募集。Claudeで叩き台作成→スライドで説明。各自の固有接点（声かけ人数・発信アカウント数）をフォームで把握。</div>
       </div>
       <div class="timeline-item">
         <div class="timeline-date">2026-04-08</div>
-        <div class="timeline-title">ウィンクルーム事前質問会</div>
+        <div class="timeline-title">ウィンクルーム 事前質問会</div>
         <div class="timeline-body">SHOGO経由。くわちゃん・0期一部・1期一部・知子さん・省吾さん少人数。</div>
       </div>
       <div class="timeline-item">
         <div class="timeline-date">2026-04-09</div>
-        <div class="timeline-title">アンバサダーオリエンテーション</div>
-        <div class="timeline-body">具体的な動き方説明。フォーム入力者への特典（発信訴求パターン）あり。</div>
+        <div class="timeline-title">アンバサダー オリエンテーション</div>
+        <div class="timeline-body">具体的な動き方説明。4/9までにフォーム入力した人→「成約につながるストーリーズ訴求パターン」を特典で提供。</div>
       </div>
       <div class="timeline-item">
         <div class="timeline-date">2026-04-10〜</div>
         <div class="timeline-title">一斉集客開始・オプチャ誘導</div>
+        <div class="timeline-body">アンバサダーが各チャンネルで発信開始。既存オプチャ→新オプチャへ誘導。</div>
       </div>
       <div class="timeline-item">
         <div class="timeline-date">2026-04-18〜</div>
-        <div class="timeline-title">勉強会開始（全4回）</div>
+        <div class="timeline-title">勉強会スタート（全4回）</div>
         <div class="timeline-body">ちいちゃん・くわちゃん登壇のお悩み相談会形式。</div>
       </div>
       <div class="timeline-item">
         <div class="timeline-date">3回目勉強会後〜</div>
         <div class="timeline-title">個別面談開始</div>
-        <div class="timeline-body">ちいちゃん・くわちゃん主導。料金を含めた詳細資料を提示。</div>
+        <div class="timeline-body">ちいちゃん・くわちゃん主導。料金含む詳細資料を提示。</div>
       </div>
       <div class="timeline-item">
         <div class="timeline-date">2026-05月中旬〜06月</div>
@@ -439,13 +672,12 @@
       </div>
     </div>
 
-    <p class="section-title">確認済みの直近アクション</p>
+    <p class="section-title">資料準備スケジュール</p>
     <div class="card">
       <ul>
-        <li>2026-03-31：いよ・くわちゃん・ちいちゃんリアル会合（ターゲット・ロードマップ・ベネフィット確認）</li>
-        <li>ちいちゃん・くわちゃんをチャットに追加</li>
-        <li>4月2日用スライドをClaudeで作成</li>
-        <li>最終クロージング資料：あっこさん経由でデザイナーに依頼</li>
+        <li>4/2説明会用スライド：Claudeで叩き台を即日作成</li>
+        <li>クロージング最終資料：あっこさん経由でデザイナーに依頼</li>
+        <li>個別面談用資料：料金含む詳細版を別途準備</li>
       </ul>
     </div>
 
@@ -463,44 +695,44 @@
           <th>詳細</th>
         </tr>
         <tr>
-          <td>集客リーダー・運営全般</td>
+          <td><span class="badge badge-purple">集客・運営</span></td>
           <td>いよ・SHIHO</td>
-          <td>オプチャ・勉強会・個別面談管理・書類・スケジュール</td>
+          <td>オプチャ管理・勉強会・個別面談調整・書類・スケジュール</td>
         </tr>
         <tr>
-          <td>ローンチディレクター</td>
+          <td><span class="badge badge-purple">ローンチ戦略</span></td>
           <td>そのママ（園山さん）</td>
-          <td>数値分析・全体戦略の頭出し。SHIHOとの分配：4:6〜5:5</td>
+          <td>数値分析・ファネル管理・全体戦略の頭出し。SHIHOとの分配：4:6〜5:5</td>
         </tr>
         <tr>
-          <td>メイン講師（運用代行リアル）</td>
+          <td><span class="badge badge-pink">メイン講師</span></td>
           <td>ちーちゃん・くわちゃん</td>
-          <td>勉強会登壇・個別面談・ゲリラ担当</td>
+          <td>勉強会登壇・個別面談・ゲリラセッション担当</td>
         </tr>
         <tr>
-          <td>ベース構築サポート</td>
+          <td><span class="badge badge-green">ベース構築</span></td>
           <td>マサ（窪内）・トシ（KOIKE）</td>
-          <td>4〜6回目のサポートメイン。Lark Baseの技術サポート・仕組み設計アドバイス</td>
+          <td>4〜6回目のサポートメイン。Lark Baseの技術サポート・仕組み設計アドバイス（SNS知識不要）</td>
         </tr>
         <tr>
-          <td>学習サポート・進捗管理</td>
+          <td><span class="badge badge-green">学習サポート</span></td>
           <td>ゆうりさん・ちびのん</td>
-          <td>質問対応・アンケート・進捗確認</td>
+          <td>質問対応・アンケート・進捗確認。規模拡大時はベース構築側に回る可能性あり</td>
         </tr>
         <tr>
-          <td>個別紹介アンバサダー</td>
+          <td><span class="badge badge-yellow">アンバサダー</span></td>
           <td>BXPメンバー全員</td>
-          <td>紹介料10%（約4万円）</td>
+          <td>自分のSNS・個別声かけでオプチャに誘導。制約成立で紹介料10%（約4万円）</td>
         </tr>
         <tr>
-          <td>相談役（ベース補佐）</td>
+          <td><span class="badge badge-gray">相談役</span></td>
           <td>たのパパ・シュン</td>
-          <td>必要に応じて、強制ではない</td>
+          <td>ベース構築補佐。必要に応じて（強制ではない）</td>
         </tr>
         <tr>
-          <td>AI秘書オプション担当</td>
+          <td><span class="badge badge-gray">AI秘書担当</span></td>
           <td>未定（マサ・たのパパ・シュン有力）</td>
-          <td>GW明けに判断</td>
+          <td>GW明けに判断。AI進化スピードを鑑み直前判断が精度高い</td>
         </tr>
       </table>
     </div>
@@ -508,20 +740,19 @@
     <p class="section-title">報酬分配</p>
     <div class="card highlight">
       <ul>
-        <li>ベース構築サポート枠の12%をマサ・トシ・相談役で分配（相談度合いによりメンバー間で決定）</li>
-        <li>アンバサダー：制約成立で10%（決済方法により変動あり）</li>
+        <li>ベース構築サポート枠の<strong>12%</strong>をマサ・トシ・相談役で分配（相談度合いによりメンバー間で決定）</li>
+        <li>アンバサダー：制約成立で<strong>10%</strong>（決済方法により変動あり）</li>
         <li>ローンチディレクター（そのママ）：SHIHOとの分配 4:6〜5:5</li>
       </ul>
     </div>
 
     <p class="section-title">決済方法（検討中）</p>
-    <div class="notice">前回（1期）は決済手数料で100万円近く取られた。今回は要改善。</div>
+    <div class="notice">前回（1期）は決済手数料で100万円近く取られた。今回は要改善。朋子さんと要確認。</div>
     <div class="card">
       <ul>
         <li>SHIHOのユニバペイ（安いが未使用）</li>
-        <li>モッシュ（6.5%〜）</li>
-        <li>銀行振り込み一括なら割引（他講座の慣例）→今回から導入検討</li>
-        <li>朋子さんと要確認</li>
+        <li>モッシュ（手数料6.5%〜）</li>
+        <li>銀行振り込み一括なら割引（他講座の慣例として導入検討）</li>
       </ul>
     </div>
 
@@ -530,56 +761,63 @@
   <!-- ===== 集客設計 ===== -->
   <div id="tab-sales" class="tab-content">
 
-    <p class="section-title">前回（1期）の実績</p>
-    <div class="table-wrap">
-      <table>
-        <tr><th>指標</th><th>数値</th></tr>
-        <tr><td>オプチャ登録</td><td>358人</td></tr>
-        <tr><td>Lark登録</td><td>183人</td></tr>
-        <tr><td>成約率（全体）</td><td>21%</td></tr>
-        <tr><td>面談→成約率</td><td>55.26%</td></tr>
-        <tr><td>勉強会→成約率</td><td>17.21%</td></tr>
-      </table>
+    <p class="section-title">前回（1期）実績</p>
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="stat-val">358人</div>
+        <div class="stat-label">オプチャ登録</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val">183人</div>
+        <div class="stat-label">Lark登録</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val">21%</div>
+        <div class="stat-label">全体成約率</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val">55%</div>
+        <div class="stat-label">面談→成約率</div>
+      </div>
     </div>
 
     <p class="section-title">オプチャ戦略</p>
     <div class="card">
-      <h3>「選ばれ続ける運用代行者になろう」オプチャ</h3>
+      <h3>「選ばれ続ける運用代行者になろう」オプチャ（新設）</h3>
       <ul>
-        <li>既存「スキルで稼ぐ秘密の会」（360人）は残す（DXキャンプ2期等に活用）</li>
-        <li>興味ある人を新オプチャに誘導</li>
-        <li>濃い接点（個別に声をかけられる人経由）が重要</li>
-        <li>30人達成には約1,600人のオプチャ登録が必要（試算）</li>
+        <li>既存「スキルで稼ぐ秘密の会」（360人）は残す → DXキャンプ2期等に活用</li>
+        <li>新オプチャへの誘導：濃い接点（個別声かけ）が制約率に直結</li>
+        <li>30人制約には約1,600人のオプチャ登録が必要（試算）</li>
       </ul>
     </div>
 
     <p class="section-title">アンバサダー戦略</p>
     <div class="card pink">
-      <h3>アンバサダーの定義</h3>
+      <h3>アンバサダーの役割</h3>
       <ul>
-        <li>自分のフロントチャンネル（インスタ等）でオプチャに人を流してくれる人</li>
-        <li>個別に声かけしてオプチャに誘導してくれる人</li>
-        <li>制約成立で10%支払い</li>
+        <li>自分のフロントチャンネル（インスタ等）でオプチャに人を流す</li>
+        <li>個別に声かけしてオプチャに誘導する</li>
+        <li>制約成立で10%支払い（決済方法により変動）</li>
       </ul>
     </div>
     <div class="card">
-      <h3>4/2説明会のゴール（そのママ提案）</h3>
+      <h3>4/2説明会のゴール（そのママ設計）</h3>
       <ul>
-        <li>アンバサダーを集めるだけでなく、各アクションに数値目標を立てる</li>
-        <li>固有接点（声かけできる人数）をフォームで把握</li>
-        <li>自分のアカウントで発信する人の人数も把握</li>
-        <li>4/9オリエンテーションまでにフォーム入力した人には「成約につながるストーリーズ訴求を教える」特典</li>
+        <li>各人の固有接点（声かけできる人数）・発信アカウント数をフォームで把握</li>
+        <li>アクションごとに数値目標を設定する</li>
+        <li>4/9オリエン前にフォーム入力した人→「成約につながるストーリーズ訴求パターン」を特典提供</li>
       </ul>
     </div>
 
-    <p class="section-title">集客チャネル</p>
-    <div class="card">
-      <ul>
-        <li>既存オープチャ（約360人）→ 運用代行専用オープチャに誘導</li>
-        <li>Larkグループチャット（約180人）</li>
-        <li>BXPメンバー（約40人）からの個別紹介</li>
-        <li>SNS発信（ストーリー等）</li>
-      </ul>
+    <p class="section-title">集客チャネル一覧</p>
+    <div class="table-wrap">
+      <table>
+        <tr><th>チャネル</th><th>規模</th><th>アクション</th></tr>
+        <tr><td>既存オープチャ</td><td>約360人</td><td>新オプチャへ誘導</td></tr>
+        <tr><td>Larkグループチャット</td><td>約180人</td><td>新オプチャへ誘導</td></tr>
+        <tr><td>BXPメンバー紹介</td><td>約40人</td><td>個別声かけ・アンバサダー活動</td></tr>
+        <tr><td>SNS発信</td><td>—</td><td>ストーリーズ等でオプチャ誘導</td></tr>
+      </table>
     </div>
 
   </div>
@@ -588,7 +826,7 @@
   <div id="tab-links" class="tab-content">
 
     <p class="section-title">重要リンク</p>
-    <div class="notice">URLは随時更新してください。</div>
+    <div class="notice">URLは決まり次第更新してください。</div>
 
     <div class="card">
       <h3>Lark</h3>
@@ -602,16 +840,25 @@
     <div class="card">
       <h3>資料</h3>
       <ul>
-        <li>4/2アンバサダー説明会スライド：<span style="color:var(--muted);">（URLをここに追加）</span></li>
-        <li>クロージング資料（デザイン依頼中）：<span style="color:var(--muted);">（URLをここに追加）</span></li>
-        <li>アンバサダー向けフォーム：<span style="color:var(--muted);">（URLをここに追加）</span></li>
+        <li>4/2アンバサダー説明会スライド：<span style="color:var(--muted);">（作成後に追加）</span></li>
+        <li>クロージング最終資料（デザイン依頼中）：<span style="color:var(--muted);">（完成後に追加）</span></li>
+        <li>アンバサダー向けフォーム（固有接点・発信数回答）：<span style="color:var(--muted);">（作成後に追加）</span></li>
+        <li>個別面談用資料（料金含む）：<span style="color:var(--muted);">（作成後に追加）</span></li>
       </ul>
     </div>
 
     <div class="card">
       <h3>決済</h3>
       <ul>
-        <li>ユニバペイ or モッシュ：<span style="color:var(--muted);">（決定後に追加）</span></li>
+        <li>ユニバペイ / モッシュ / 銀行振込：<span style="color:var(--muted);">（確定後に追加）</span></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>参考：前回（1期）データ</h3>
+      <ul>
+        <li>オプチャ登録：358人 / Lark登録：183人</li>
+        <li>全体成約率：21% / 面談→成約：55.26% / 勉強会→成約：17.21%</li>
       </ul>
     </div>
 
@@ -620,11 +867,11 @@
 </main>
 
 <script>
-  function showTab(name) {
+  function showTab(name, btn) {
     document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
     document.querySelectorAll('nav button').forEach(el => el.classList.remove('active'));
     document.getElementById('tab-' + name).classList.add('active');
-    event.target.classList.add('active');
+    btn.classList.add('active');
   }
 </script>
 
